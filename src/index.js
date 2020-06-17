@@ -16,12 +16,14 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      turn: 0,
       squares: Array(9).fill(null),
       xIsNext: true
     }
   }
 
   handleClick(i) {
+    let turn = this.state.turn;
     const squares = this.state.squares.slice();
     if (calculateWinner(squares) || squares[i])
     {
@@ -29,6 +31,7 @@ class Board extends React.Component {
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O'
     this.setState({
+      turn: turn + 1,
       squares: squares,
       xIsNext: !this.state.xIsNext
     });
@@ -45,10 +48,14 @@ class Board extends React.Component {
 
   render() {
     const winner = calculateWinner(this.state.squares);
+    let turn = this.state.turn;
     let status;
 
     if (winner) {
       status = 'Winner ' + winner;
+    }
+    else if (turn === 9 && !winner) {
+      status = 'Game over!'
     }
 
     else {
